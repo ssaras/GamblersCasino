@@ -24,13 +24,20 @@ namespace GamblersCasino
             {
                 Console.WriteLine($"Player {i} has joined the table!");
 
-                List<int> cards = new List<int>() { 2, 1, 2 };
+                List<int> cards = new List<int>() { 2, 1, 3 };
                 List<int> suits = new List<int>() { 2, 2, 2 };
 
-                Dictionary<string, int> isStraightFlush = IsStrightFlush(cards, suits);
-                if (isStraightFlush["hasHand"] > 0)
+                //Dictionary<string, int> isStraightFlush = IsStrightFlush(cards, suits);
+                //if (isStraightFlush["hasHand"] > 0)
+                //{
+                //    Console.WriteLine($"Player {i} has a straight flush of {isStraightFlush["matchingCard"]}'s {isStraightFlush["matchingSuit"]}'s!");
+                //    continue;
+                //}
+
+                Dictionary<string, int> isStraight = IsStraight(cards);
+                if (isStraight["hasHand"] > 0)
                 {
-                    Console.WriteLine($"Player {i} has a straight flush of {isStraightFlush["matchingCard"]}'s {isStraightFlush["matchingSuit"]}'s!");
+                    Console.WriteLine($"Player {i} has a straight {isStraight["matchingCard"]}'s!");
                     continue;
                 }
 
@@ -64,6 +71,19 @@ namespace GamblersCasino
             Console.WriteLine($"\nPlayers: {playerCount}");
 
             Console.ReadLine();
+        }
+
+        static Dictionary<string, int> IsStraight(List<int> cards)
+        {
+            Array.Sort(cards.ToArray());
+
+            // Check Ace, Two, Three run
+
+            // Check King Ace, Two run
+
+
+            return new Dictionary<string, int>();
+            //return CreateResponseObject(cardMatches, suitMatches);
         }
 
         static Dictionary<string, int> IsStrightFlush(List<int> cards, List<int> suits)
