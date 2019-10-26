@@ -24,7 +24,7 @@ namespace GamblersCasino
             {
                 Console.WriteLine($"Player {i} has joined the table!");
 
-                List<int> cards = new List<int>() { 2, 1, 3 };
+                List<int> cards = new List<int>() { 12, 14, 13 };
                 List<int> suits = new List<int>() { 2, 2, 2 };
 
                 //Dictionary<string, int> isStraightFlush = IsStrightFlush(cards, suits);
@@ -34,10 +34,10 @@ namespace GamblersCasino
                 //    continue;
                 //}
 
-                Dictionary<string, int> isStraight = IsStraight(cards);
-                if (isStraight["hasHand"] > 0)
+                CardResult isStraight = IsStraight(cards);
+                if (isStraight.HasHand)
                 {
-                    Console.WriteLine($"Player {i} has a straight {isStraight["matchingCard"]}'s!");
+                    Console.WriteLine($"Player {i} has a straight!");
                     continue;
                 }
 
@@ -73,17 +73,44 @@ namespace GamblersCasino
             Console.ReadLine();
         }
 
-        static Dictionary<string, int> IsStraight(List<int> cards)
+        static CardResult IsStraight(List<int> cards)
         {
-            Array.Sort(cards.ToArray());
+            CardResult cardResult = new CardResult();
+            int[] cardsSorted = cards.OrderBy(i => i).ToArray();
+            bool isStraight = false;
 
             // Check Ace, Two, Three run
-
+            if (cardsSorted[0] == 2 && cardsSorted[1] == 3 && cardsSorted[2] == 14)
+            {
+                isStraight = true;
+            }
             // Check King Ace, Two run
+            else if (cardsSorted[0] == 2 && cardsSorted[1] == 13 && cardsSorted[2] == 14)
+            {
+                isStraight = false;
+            }
+            else
+            {
+                
+                for (int i = 0; i<cardsSorted.Length -1; i++)
+                {
+                    if (cardsSorted[i] + 1 == cardsSorted[i + 1])
+                    {
+                        isStraight = true;
+                        continue;
+                    }
+                    else
+                    {
+                        isStraight = false;
+                        break;
+                    }
+                }
+            }
 
+            cardResult.HasHand = isStraight;
+            cardResult.Hand = cardsSorted;
 
-            return new Dictionary<string, int>();
-            //return CreateResponseObject(cardMatches, suitMatches);
+            return cardResult;
         }
 
         static Dictionary<string, int> IsStrightFlush(List<int> cards, List<int> suits)
@@ -152,6 +179,7 @@ namespace GamblersCasino
 
             return returnObject;
         }
+
     }
 }
 
