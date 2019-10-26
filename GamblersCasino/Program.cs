@@ -107,8 +107,6 @@ namespace GamblersCasino
         {
             playerHands.Sort((x, y) => x.HandType.CompareTo(y.HandType));
 
-            CardResult winner = null;//new CardResult()
-
             List<CardResult> straightFlushes = new List<CardResult>();
             List<CardResult> threeKinds = new List<CardResult>();
             List<CardResult> straights = new List<CardResult>();
