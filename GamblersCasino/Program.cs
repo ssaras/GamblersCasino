@@ -2,30 +2,25 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static GamblersCasino.Card;
 
 namespace GamblersCasino
 {
     class Program
     {
-
         static void Main(string[] args)
         {
             Console.WriteLine("Welcome to Grate Guy's Casino!!!");
-            Console.WriteLine("How many players do you have?\n");
+            Console.WriteLine("How many players do you have?");
 
             int playerCount = Convert.ToInt16(Console.ReadLine());
-            //int playerCount = GetRandomNumber(5,15);
-
-            Console.WriteLine("");
 
             List<CardResult> playerHands = new List<CardResult>();
 
+            Console.WriteLine("");
+            Console.WriteLine("Enter hands");
+
             for (int i = 0; i < playerCount; i++)
-            {
-                Console.WriteLine("Enter hand.");
+            {                
                 string input = Console.ReadLine();
 
                 List<int> cards = ConvertToCard(input);
@@ -34,7 +29,6 @@ namespace GamblersCasino
                 CardResult playerHand = IsStrightFlush(cards, suits);
                 if (playerHand.HasHand)
                 {
-                    Console.WriteLine($"Player {i} has a straight flush!");
                     playerHand.PlayerId = i;
                     playerHands.Add(playerHand);
                     continue;
@@ -43,7 +37,6 @@ namespace GamblersCasino
                 playerHand = IsThreeKind(cards);
                 if (playerHand.HasHand)
                 {
-                    Console.WriteLine($"Player {i} has a three of a kind!");
                     playerHand.PlayerId = i;
                     playerHands.Add(playerHand);
                     continue;
@@ -52,7 +45,6 @@ namespace GamblersCasino
                 playerHand = IsStraight(cards);
                 if (playerHand.HasHand)
                 {
-                    Console.WriteLine($"Player {i} has a straight!");
                     playerHand.PlayerId = i;
                     playerHands.Add(playerHand);
                     continue;
@@ -61,7 +53,6 @@ namespace GamblersCasino
                 playerHand = IsFlush(suits);
                 if (playerHand.HasHand)
                 {
-                    Console.WriteLine($"Player {i} has a flush!");
                     playerHand.PlayerId = i;
                     playerHands.Add(playerHand);
                     continue;
@@ -70,7 +61,6 @@ namespace GamblersCasino
                 playerHand = IsPair(cards);
                 if (playerHand.HasHand)
                 {
-                    Console.WriteLine($"Player {i} has a pair!");
                     playerHand.PlayerId = i;
                     playerHands.Add(playerHand);
                     continue;
@@ -79,7 +69,6 @@ namespace GamblersCasino
                 playerHand = GetHighCard(cards);
                 if (playerHand.HasHand)
                 {
-                    Console.WriteLine($"Player {i} has a high card!");
                     playerHand.PlayerId = i;
                     playerHands.Add(playerHand);
                     continue;
@@ -87,14 +76,10 @@ namespace GamblersCasino
 
             }
 
-            FindBestHand(playerHands);
+            CardResult winner = FindBestHand(playerHands);
 
-            Console.WriteLine("\nThanks for playing!");
-
-            Console.WriteLine("\nStats for nerds:");
-            Console.WriteLine("------------------");
-            Console.WriteLine($"\nPlayers: {playerCount}");
-
+            Console.WriteLine("");
+            Console.WriteLine(winner.PlayerId);
             Console.ReadLine();
         }
 
@@ -247,7 +232,7 @@ namespace GamblersCasino
             CardResult cardResult = new CardResult {
                 HasHand = isStraight,
                 Hand = cardsSorted,
-                HandType = isStraight ? (int)Card.HandType.StrightFlush : (int)Card.HandType.HighCard
+                HandType = isStraight ? (int)Card.HandType.Straight : (int)Card.HandType.HighCard
             };
 
             return cardResult;
@@ -275,7 +260,7 @@ namespace GamblersCasino
                 HasHand = hasHand,
                 Hand = isStraight.Hand,
                 MatchingSuit = matchingSuit,
-                HandType = hasHand ? (int)Card.HandType.StrightFlush : (int)Card.HandType.HighCard
+                HandType = hasHand ? (int)Card.HandType.StraightFlush : (int)Card.HandType.HighCard
             };
 
             return cardResult;
@@ -330,6 +315,7 @@ namespace GamblersCasino
             {
                 cardResult.HasHand = true;
                 cardResult.MatchingCard = matches[0];
+                cardResult.HandType = (int)Card.HandType.Pair;
             }
 
             return cardResult;
@@ -343,7 +329,8 @@ namespace GamblersCasino
             {
                 HasHand = true,
                 Hand = cardsSorted,
-                HandType = (int)Card.HandType.HighCard
+                HandType = (int)Card.HandType.HighCard,
+                MatchingCard = cardsSorted[2]
             };
 
             return cardResult;

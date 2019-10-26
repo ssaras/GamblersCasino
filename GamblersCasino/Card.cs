@@ -15,7 +15,7 @@ namespace GamblersCasino
             Flush,
             Straight,
             ThreeKind,
-            StrightFlush
+            StraightFlush
         }
 
     }
