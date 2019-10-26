@@ -27,12 +27,12 @@ namespace GamblersCasino
                 List<int> cards = new List<int>() { 12, 14, 13 };
                 List<int> suits = new List<int>() { 2, 2, 2 };
 
-                //Dictionary<string, int> isStraightFlush = IsStrightFlush(cards, suits);
-                //if (isStraightFlush["hasHand"] > 0)
-                //{
-                //    Console.WriteLine($"Player {i} has a straight flush of {isStraightFlush["matchingCard"]}'s {isStraightFlush["matchingSuit"]}'s!");
-                //    continue;
-                //}
+                CardResult isStraightFlush = IsStrightFlush(cards, suits);
+                if (isStraightFlush.HasHand)
+                {
+                    Console.WriteLine($"Player {i} has a straight flush!");
+                    continue;
+                }
 
                 CardResult isStraight = IsStraight(cards);
                 if (isStraight.HasHand)
@@ -121,12 +121,31 @@ namespace GamblersCasino
             return cardResult;
         }
 
-        static Dictionary<string, int> IsStrightFlush(List<int> cards, List<int> suits)
+        static CardResult IsStrightFlush(List<int> cards, List<int> suits)
         {
-            int[] cardMatches = cards.GroupBy(i => i).Where(g => g.Count() == 3).Select(g => g.Key).ToArray();
+            // Check for Straight
+            CardResult isStraight = IsStraight(cards);            
+
+            // Check for flush
             int[] suitMatches = suits.GroupBy(i => i).Where(g => g.Count() == 3).Select(g => g.Key).ToArray();
 
-            return CreateResponseObject(cardMatches, suitMatches);
+            // If suits match and theres a straight, we have a straight flush
+            bool hasHand = false;
+            int matchingSuit = 0;
+            if (isStraight.HasHand && suitMatches.Length > 0)
+            {
+                hasHand = true;
+                matchingSuit = suitMatches[0];
+            }
+
+            CardResult cardResult = new CardResult
+            {
+                HasHand = hasHand,
+                Hand = isStraight.Hand,
+                MatchingSuit = matchingSuit
+            };
+
+            return cardResult;
         }
 
         static Dictionary<string, int> IsFlush(List<int> cards)
