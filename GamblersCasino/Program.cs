@@ -8,8 +8,6 @@ namespace GamblersCasino
 {
     class Program
     {
-        static readonly int[] CARDS = new int[] { 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14 };
-
         static void Main(string[] args)
         {
             Console.WriteLine("Welcome to Grate Guy's Casino!!!");
