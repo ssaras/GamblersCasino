@@ -32,14 +32,23 @@ namespace GamblersCasino
 
             }
 
-            CardResult winner = FindBestHand(playerHands);
+            List<CardResult> winner = FindBestHand(playerHands);
+
+            string output = String.Empty;
+
+            foreach (CardResult card in winner)
+            {
+                output += card.PlayerId + " ";
+
+
+            }
 
             Console.WriteLine("");
-            Console.WriteLine(winner.PlayerId);
+            Console.WriteLine(output);
             Console.ReadLine();
         }
 
-        static CardResult FindBestHand(List<CardResult> playerHands)
+        static List<CardResult> FindBestHand(List<CardResult> playerHands)
         {
             playerHands.Sort((x, y) => x.HandType.CompareTo(y.HandType));
 
@@ -49,6 +58,7 @@ namespace GamblersCasino
             List<CardResult> flushes = new List<CardResult>();
             List<CardResult> pairs = new List<CardResult>();
             List<CardResult> highCards = new List<CardResult>();
+            List<CardResult> bestHands = new List<CardResult>();
 
             foreach(CardResult hand in playerHands)
             {
@@ -81,7 +91,8 @@ namespace GamblersCasino
             // Check Straight Flushes
             if (straightFlushes.Count() == 1)
             {
-                return straightFlushes[0];
+                bestHands.Add(straightFlushes[0]);
+                return bestHands;
             }
             else if (straightFlushes.Count() > 1)
             {
@@ -91,7 +102,8 @@ namespace GamblersCasino
             // Check Three Kinds
             if (threeKinds.Count() == 1)
             {
-                return threeKinds[0];
+                bestHands.Add(threeKinds[0]);
+                return bestHands;
             }
             else if (threeKinds.Count() > 1)
             {
@@ -101,7 +113,8 @@ namespace GamblersCasino
             // Check Straights
             if (straights.Count() == 1)
             {
-                return straights[0];
+                bestHands.Add(straights[0]);
+                return bestHands;
             }
             else if (straights.Count() > 1)
             {
@@ -111,7 +124,8 @@ namespace GamblersCasino
             // Check flushes
             if (flushes.Count() == 1)
             {
-                return flushes[0];
+                bestHands.Add(flushes[0]);
+                return bestHands;
             }
             else if (flushes.Count() > 1)
             {
@@ -121,7 +135,8 @@ namespace GamblersCasino
             // Check pairs
             if (pairs.Count() == 1)
             {
-                return pairs[0];
+                bestHands.Add(pairs[0]);
+                return bestHands;
             }
             else if (pairs.Count() > 1)
             {
@@ -131,18 +146,61 @@ namespace GamblersCasino
             // Check high cards
             if (highCards.Count() == 1)
             {
-                return highCards[0];
+                bestHands.Add(highCards[0]);
+                return bestHands;
             }
             
             return GetHighCard(highCards);
             
         }
 
-        static CardResult GetHighCard(List<CardResult> cards)
+        /// <summary>
+        /// Recursive function that finds the hand with the highest card in a set of hands.
+        /// </summary>
+        /// <param name="cards"></param> The hands.
+        /// <param name="highCardIndex"></param> The index of the highest card to check against
+        /// <returns>
+        /// A list with the highest hand. If there are more than one in the list, there is a tie
+        /// </returns>
+        static List<CardResult> GetHighCard(List<CardResult> cards, int highCardIndex = 2)
         {
-            cards.Sort((x, y) => x.MatchingCard.CompareTo(y.MatchingCard));
+            cards.Sort((x, y) => x.HighCard.CompareTo(y.HighCard));
 
-            return cards[0];
+            var thing = 0;
+
+            int highestNumber = -1;
+            List<CardResult> highCards = new List<CardResult>();
+
+            foreach (CardResult card in cards)
+            {
+                // If the current card is higher than the previous card
+                // clear the high card list and set the highest card
+                if (card.Hand[highCardIndex] > highestNumber)
+                {
+                    highCards = new List<CardResult>();
+                    highestNumber = card.Hand[highCardIndex];
+                    highCards.Add(card);
+                }
+                // If the current card is equal to the highest card 
+                // add it to high card list (we'll check this list again)
+                else if(card.Hand[highCardIndex] == highestNumber)
+                {
+                    highCards.Add(card);
+                }
+            }
+
+            // If the list has more than one high card, 
+            // check it again but against the next highest card 
+            // until all cards have been checked
+            if (highCardIndex > 0 && highCards.Count() > 1)
+            {
+                return GetHighCard(highCards, --highCardIndex);
+            }
+            else
+            {
+                return highCards;
+            }
+
         }
 
         static CardResult FindHand(List<int> cards, List<int> suits)
@@ -150,39 +208,53 @@ namespace GamblersCasino
             CardResult playerHand = IsStrightFlush(cards, suits);
             if (playerHand.HasHand)
             {
+                playerHand.Hand = SortHand(cards);
+                playerHand.HighCard = playerHand.Hand[2];
                 return playerHand;
             }
 
             playerHand = IsThreeKind(cards);
             if (playerHand.HasHand)
             {
+                playerHand.Hand = SortHand(cards);
+                playerHand.HighCard = playerHand.Hand[2];
                 return playerHand;
             }
 
             playerHand = IsStraight(cards);
             if (playerHand.HasHand)
             {
+                playerHand.Hand = SortHand(cards);
+                playerHand.HighCard = playerHand.Hand[2];
                 return playerHand;
             }
 
             playerHand = IsFlush(suits);
             if (playerHand.HasHand)
             {
+                playerHand.Hand = SortHand(cards);
+                playerHand.HighCard = playerHand.Hand[2];
                 return playerHand;
             }
 
             playerHand = IsPair(cards);
             if (playerHand.HasHand)
             {
+                playerHand.Hand = SortHand(cards);
+                playerHand.HighCard = playerHand.Hand[2];
                 return playerHand;
             }
 
-            return GetHighCard(cards);
+            playerHand = GetHighCard(cards);
+            playerHand.Hand = SortHand(cards);
+            playerHand.HighCard = playerHand.Hand[2];
+
+            return playerHand;
         }
 
         static CardResult IsStraight(List<int> cards)
         {
-            int[] cardsSorted = cards.OrderBy(i => i).ToArray();
+            int[] cardsSorted = SortHand(cards);
             bool isStraight = false;
 
             // Check Ace, Two, Three run
@@ -222,7 +294,6 @@ namespace GamblersCasino
 
             CardResult cardResult = new CardResult {
                 HasHand = isStraight,
-                Hand = cardsSorted,
                 HandType = isStraight ? (int)Card.HandType.Straight : (int)Card.HandType.HighCard
             };
 
@@ -249,7 +320,6 @@ namespace GamblersCasino
             CardResult cardResult = new CardResult
             {
                 HasHand = hasHand,
-                Hand = isStraight.Hand,
                 MatchingSuit = matchingSuit,
                 HandType = hasHand ? (int)Card.HandType.StraightFlush : (int)Card.HandType.HighCard
             };
@@ -266,7 +336,6 @@ namespace GamblersCasino
             if (matches.Length > 0)
             {
                 cardResult.HasHand = true;
-                cardResult.MatchingCard = matches[0];
             }
 
             return cardResult;
@@ -279,6 +348,7 @@ namespace GamblersCasino
             if (cardResult.HasHand)
             {
                 cardResult.HandType = (int)Card.HandType.Flush;
+                cardResult.MatchingSuit = cards[0];
             }
 
             return cardResult;
@@ -291,6 +361,7 @@ namespace GamblersCasino
             if (cardResult.HasHand)
             {
                 cardResult.HandType = (int)Card.HandType.ThreeKind;
+                cardResult.MatchingCard = cards[0];
             }
 
             return cardResult;
@@ -312,9 +383,14 @@ namespace GamblersCasino
             return cardResult;
         }
 
+        static int[] SortHand(List<int> cards)
+        {
+            return cards.OrderBy(i => i).ToArray();
+        }
+
         static CardResult GetHighCard(List<int> cards)
         {
-            int[] cardsSorted = cards.OrderBy(i => i).ToArray();
+            int[] cardsSorted = SortHand(cards);
 
             CardResult cardResult = new CardResult
             {
