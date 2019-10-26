@@ -16,7 +16,7 @@ namespace GamblersCasino
             Console.WriteLine("How many players do you have?\n");
 
             // int playerCount = Convert.ToInt16(Console.ReadLine());
-            int playerCount = GetRandomNumber(2,5);
+            int playerCount = GetRandomNumber(5,15);
 
             Console.WriteLine("");
 
@@ -105,7 +105,110 @@ namespace GamblersCasino
 
         static CardResult FindBestHand(List<CardResult> playerHands)
         {
-            return new CardResult();
+            playerHands.Sort((x, y) => x.HandType.CompareTo(y.HandType));
+
+            CardResult winner = null;//new CardResult()
+
+            List<CardResult> straightFlushes = new List<CardResult>();
+            List<CardResult> threeKinds = new List<CardResult>();
+            List<CardResult> straights = new List<CardResult>();
+            List<CardResult> flushes = new List<CardResult>();
+            List<CardResult> pairs = new List<CardResult>();
+            List<CardResult> highCards = new List<CardResult>();
+
+            foreach(CardResult hand in playerHands)
+            {
+                switch (hand.HandType)
+                {
+                    case 1:
+                        highCards.Add(hand);
+                        break;
+                    case 2:
+                        pairs.Add(hand);
+                        break;
+                    case 3:
+                        flushes.Add(hand);
+                        break;
+                    case 4:
+                        straights.Add(hand);
+                        break;
+                    case 5:
+                        threeKinds.Add(hand);
+                        break;
+                    case 6:
+                        straightFlushes.Add(hand);
+                        break;
+                    default:
+                        // u wot m8?
+                        break;
+                }
+            }
+
+            // Check Straight Flushes
+            if (straightFlushes.Count() == 1)
+            {
+                return straightFlushes[0];
+            }
+            else if (straightFlushes.Count() > 1)
+            {
+                return GetHighCard(straightFlushes);
+            }
+
+            // Check Three Kinds
+            if (threeKinds.Count() == 1)
+            {
+                return threeKinds[0];
+            }
+            else if (threeKinds.Count() > 1)
+            {
+                return GetHighCard(threeKinds);
+            }
+
+            // Check Straights
+            if (straights.Count() == 1)
+            {
+                return straights[0];
+            }
+            else if (straights.Count() > 1)
+            {
+                return GetHighCard(straights);
+            }
+
+            // Check flushes
+            if (flushes.Count() == 1)
+            {
+                return flushes[0];
+            }
+            else if (flushes.Count() > 1)
+            {
+                return GetHighCard(flushes);
+            }
+
+            // Check pairs
+            if (pairs.Count() == 1)
+            {
+                return pairs[0];
+            }
+            else if (pairs.Count() > 1)
+            {
+                return GetHighCard(pairs);
+            }
+
+            // Check high cards
+            if (highCards.Count() == 1)
+            {
+                return highCards[0];
+            }
+            
+            return GetHighCard(highCards);
+            
+        }
+
+        static CardResult GetHighCard(List<CardResult> cards)
+        {
+            cards.Sort((x, y) => x.MatchingCard.CompareTo(y.MatchingCard));
+
+            return cards[0];
         }
 
         static CardResult IsStraight(List<int> cards)
