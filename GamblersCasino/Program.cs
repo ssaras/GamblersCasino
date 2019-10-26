@@ -8,8 +8,7 @@ namespace GamblersCasino
 {
     class Program
     {
-        static int[] CARDS = new int[] { 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14 };
-        static int[] SUITS = new int[] { 1, 2, 3, 4 };
+        static readonly int[] CARDS = new int[] { 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14 };
 
         static void Main(string[] args)
         {
@@ -41,24 +40,24 @@ namespace GamblersCasino
                     continue;
                 }
 
-                Dictionary<string, int> isThreeKind = IsThreeKind(cards);
-                if (isThreeKind["hasHand"] > 0)
+                CardResult isThreeKind = IsThreeKind(cards);
+                if (isThreeKind.HasHand)
                 {
-                    Console.WriteLine($"Player {i} has a three of a kind of {isThreeKind["matchingCard"]}'s!");
+                    Console.WriteLine($"Player {i} has a three of a kind!");
                     continue;
                 }
 
-                Dictionary<string, int> isFlush = IsFlush(suits);
-                if (isFlush["hasHand"] > 0)
+                CardResult isFlush = IsFlush(suits);
+                if (isFlush.HasHand)
                 {
-                    Console.WriteLine($"Player {i} has a flush of {isFlush["matchingCard"]}'s!");
+                    Console.WriteLine($"Player {i} has a flush!");
                     continue;
                 }
 
-                Dictionary<string, int> isPair = IsPair(cards);
-                if (isPair["hasHand"] > 0)
+                CardResult isPair = IsPair(cards);
+                if (isPair.HasHand)
                 {
-                    Console.WriteLine($"Player {i} has a pair of {isPair["matchingCard"]}'s!");
+                    Console.WriteLine($"Player {i} has a pair!");
                     continue;
                 }
 
@@ -115,7 +114,8 @@ namespace GamblersCasino
 
             CardResult cardResult = new CardResult {
                 HasHand = isStraight,
-                Hand = cardsSorted
+                Hand = cardsSorted,
+                HandType = isStraight ? (int)Card.HandType.StrightFlush : (int)Card.HandType.HighCard
             };
 
             return cardResult;
@@ -142,71 +142,67 @@ namespace GamblersCasino
             {
                 HasHand = hasHand,
                 Hand = isStraight.Hand,
-                MatchingSuit = matchingSuit
+                MatchingSuit = matchingSuit,
+                HandType = hasHand ? (int)Card.HandType.StrightFlush : (int)Card.HandType.HighCard
             };
 
             return cardResult;
         }
 
-        static Dictionary<string, int> IsFlush(List<int> cards)
+        static CardResult HasThreeMatchingCards(List<int> cards)
         {
-            return IsThreeKind(cards);
-        }
+            CardResult cardResult = new CardResult();
 
-        static Dictionary<string, int> IsPair(List<int> cards)
-        {
-            int[] matches = cards.GroupBy(i => i).Where(g => g.Count() == 2).Select(g => g.Key).ToArray();
-            return CreateResponseObject(matches);
-        }
-
-        static Dictionary<string, int> IsThreeKind(List<int> cards)
-        {
             int[] matches = cards.GroupBy(i => i).Where(g => g.Count() == 3).Select(g => g.Key).ToArray();
-            return CreateResponseObject(matches);
+
+            if (matches.Length > 0)
+            {
+                cardResult.HasHand = true;
+                cardResult.MatchingCard = matches[0];
+            }
+
+            return cardResult;
         }
 
-        static Dictionary<string, int> CreateResponseObject(int[] cardMatches, int[] suitMatches = null)
+        static CardResult IsFlush(List<int> cards)
         {
-            int hasHand = 0;
-            int matchingCard = 0;
-            int matchingSuit = 0;
+            CardResult cardResult = HasThreeMatchingCards(cards);
 
-            // Add suits if suits was passed and match was found
-            if (suitMatches != null && suitMatches.Length > 0)
+            if (cardResult.HasHand)
             {
-                matchingSuit = suitMatches[0];
+                cardResult.HandType = (int)Card.HandType.Flush;
             }
 
-            // Add cards if match was found
-            if (cardMatches.Length > 0)
-            {
-                matchingCard = cardMatches[0];
-            }
-
-            // Pair or Three of a Kind
-            if (suitMatches == null && matchingCard > 0)
-            {
-                hasHand = 1;
-            }
-            // Straigt Flush
-            else if (suitMatches != null && matchingSuit > 0 && matchingCard > 0)
-            {
-                hasHand = 1;
-            }
-            // Straight
-            else if (suitMatches != null && matchingSuit > 0 && matchingCard <= 0)
-            {
-
-            }
-
-            Dictionary<string, int> returnObject = new Dictionary<string, int>();
-            returnObject.Add("hasHand", hasHand);
-            returnObject.Add("matchingCard", matchingCard);
-            returnObject.Add("matchingSuit", matchingSuit);
-
-            return returnObject;
+            return cardResult;
         }
 
+        static CardResult IsThreeKind(List<int> cards)
+        {
+            CardResult cardResult = HasThreeMatchingCards(cards);
+
+            if (cardResult.HasHand)
+            {
+                cardResult.HandType = (int)Card.HandType.ThreeKind;
+            }
+
+            return cardResult;
+        }
+
+        static CardResult IsPair(List<int> cards)
+        {
+            CardResult cardResult = new CardResult();
+
+            int[] matches = cards.GroupBy(i => i).Where(g => g.Count() == 2).Select(g => g.Key).ToArray();
+
+            if (matches.Length > 0)
+            {
+                cardResult.HasHand = true;
+                cardResult.MatchingCard = matches[0];
+            }
+
+            return cardResult;
+        }
+        
     }
 }
 
