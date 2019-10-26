@@ -15,53 +15,84 @@ namespace GamblersCasino
             Console.WriteLine("Welcome to Grate Guy's Casino!!!");
             Console.WriteLine("How many players do you have?\n");
 
-            int playerCount = 1;// Convert.ToInt16(Console.ReadLine());
+            // int playerCount = Convert.ToInt16(Console.ReadLine());
+            int playerCount = GetRandomNumber(2,5);
 
             Console.WriteLine("");
 
+            List<CardResult> playerHands = new List<CardResult>();
+
             for (int i = 0; i < playerCount; i++)
             {
-                Console.WriteLine($"Player {i} has joined the table!");
+                List<int> cards = new List<int>()
+                {
+                    GetRandomNumber((int)Card.Cards.Two, (int)Card.Cards.Ace),
+                    GetRandomNumber((int)Card.Cards.Two, (int)Card.Cards.Ace),
+                    GetRandomNumber((int)Card.Cards.Two, (int)Card.Cards.Ace)
+                };
+                List<int> suits = new List<int>() {
+                    GetRandomNumber((int)Card.Suits.Spades, (int)Card.Suits.Hearts),
+                    GetRandomNumber((int)Card.Suits.Spades, (int)Card.Suits.Hearts),
+                    GetRandomNumber((int)Card.Suits.Spades, (int)Card.Suits.Hearts)
+                };
 
-                List<int> cards = new List<int>() { 12, 14, 13 };
-                List<int> suits = new List<int>() { 2, 2, 2 };
-
-                CardResult isStraightFlush = IsStrightFlush(cards, suits);
-                if (isStraightFlush.HasHand)
+                CardResult playerHand = IsStrightFlush(cards, suits);
+                if (playerHand.HasHand)
                 {
                     Console.WriteLine($"Player {i} has a straight flush!");
+                    playerHand.PlayerId = i;
+                    playerHands.Add(playerHand);
                     continue;
                 }
 
-                CardResult isStraight = IsStraight(cards);
-                if (isStraight.HasHand)
-                {
-                    Console.WriteLine($"Player {i} has a straight!");
-                    continue;
-                }
-
-                CardResult isThreeKind = IsThreeKind(cards);
-                if (isThreeKind.HasHand)
+                playerHand = IsThreeKind(cards);
+                if (playerHand.HasHand)
                 {
                     Console.WriteLine($"Player {i} has a three of a kind!");
+                    playerHand.PlayerId = i;
+                    playerHands.Add(playerHand);
                     continue;
                 }
 
-                CardResult isFlush = IsFlush(suits);
-                if (isFlush.HasHand)
+                playerHand = IsStraight(cards);
+                if (playerHand.HasHand)
+                {
+                    Console.WriteLine($"Player {i} has a straight!");
+                    playerHand.PlayerId = i;
+                    playerHands.Add(playerHand);
+                    continue;
+                }
+
+                playerHand = IsFlush(suits);
+                if (playerHand.HasHand)
                 {
                     Console.WriteLine($"Player {i} has a flush!");
+                    playerHand.PlayerId = i;
+                    playerHands.Add(playerHand);
                     continue;
                 }
 
-                CardResult isPair = IsPair(cards);
-                if (isPair.HasHand)
+                playerHand = IsPair(cards);
+                if (playerHand.HasHand)
                 {
                     Console.WriteLine($"Player {i} has a pair!");
+                    playerHand.PlayerId = i;
+                    playerHands.Add(playerHand);
+                    continue;
+                }
+
+                playerHand = GetHighCard(cards);
+                if (playerHand.HasHand)
+                {
+                    Console.WriteLine($"Player {i} has a high card!");
+                    playerHand.PlayerId = i;
+                    playerHands.Add(playerHand);
                     continue;
                 }
 
             }
+
+            FindBestHand(playerHands);
 
             Console.WriteLine("\nThanks for playing!");
 
@@ -70,6 +101,11 @@ namespace GamblersCasino
             Console.WriteLine($"\nPlayers: {playerCount}");
 
             Console.ReadLine();
+        }
+
+        static CardResult FindBestHand(List<CardResult> playerHands)
+        {
+            return new CardResult();
         }
 
         static CardResult IsStraight(List<int> cards)
@@ -202,7 +238,26 @@ namespace GamblersCasino
 
             return cardResult;
         }
+
+        static CardResult GetHighCard(List<int> cards)
+        {
+            int[] cardsSorted = cards.OrderBy(i => i).ToArray();
+
+            CardResult cardResult = new CardResult
+            {
+                HasHand = true,
+                Hand = cardsSorted,
+                HandType = (int)Card.HandType.HighCard
+            };
+
+            return cardResult;
+        }
         
+        static int GetRandomNumber(int low, int high)
+        {
+            Random random = new Random();
+            return random.Next(low, high);
+        }
     }
 }
 

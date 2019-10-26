@@ -7,9 +7,8 @@ using System.Threading.Tasks;
 namespace GamblersCasino
 {
     class CardResult
-    {
-        //enum _HandType { HighCard = 1, Pair, Flush, Straight, ThreeKind, StrightFlush }
-
+    {     
+        public int PlayerId { get; set; }
         public bool HasHand { get; set; }
         public int MatchingCard { get; set; }
         public int MatchingSuit { get; set; }
@@ -18,6 +17,7 @@ namespace GamblersCasino
 
         public CardResult()
         {
+            PlayerId = -1;
             HasHand = false;
             MatchingCard = 0;
             MatchingSuit = 0;
