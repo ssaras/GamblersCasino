@@ -166,8 +166,6 @@ namespace GamblersCasino
         {
             cards.Sort((x, y) => x.HighCard.CompareTo(y.HighCard));
 
-            var thing = 0;
-
             int highestNumber = -1;
             List<CardResult> highCards = new List<CardResult>();
 
