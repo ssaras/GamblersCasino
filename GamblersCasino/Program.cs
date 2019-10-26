@@ -25,54 +25,10 @@ namespace GamblersCasino
 
                 List<int> cards = ConvertToCard(input);
                 List<int> suits = ConvertToSuit(input);
-                
-                CardResult playerHand = IsStrightFlush(cards, suits);
-                if (playerHand.HasHand)
-                {
-                    playerHand.PlayerId = i;
-                    playerHands.Add(playerHand);
-                    continue;
-                }
 
-                playerHand = IsThreeKind(cards);
-                if (playerHand.HasHand)
-                {
-                    playerHand.PlayerId = i;
-                    playerHands.Add(playerHand);
-                    continue;
-                }
-
-                playerHand = IsStraight(cards);
-                if (playerHand.HasHand)
-                {
-                    playerHand.PlayerId = i;
-                    playerHands.Add(playerHand);
-                    continue;
-                }
-
-                playerHand = IsFlush(suits);
-                if (playerHand.HasHand)
-                {
-                    playerHand.PlayerId = i;
-                    playerHands.Add(playerHand);
-                    continue;
-                }
-
-                playerHand = IsPair(cards);
-                if (playerHand.HasHand)
-                {
-                    playerHand.PlayerId = i;
-                    playerHands.Add(playerHand);
-                    continue;
-                }
-
-                playerHand = GetHighCard(cards);
-                if (playerHand.HasHand)
-                {
-                    playerHand.PlayerId = i;
-                    playerHands.Add(playerHand);
-                    continue;
-                }
+                CardResult playerHand = FindHand(cards, suits);
+                playerHand.PlayerId = i;
+                playerHands.Add(playerHand);
 
             }
 
@@ -187,6 +143,41 @@ namespace GamblersCasino
             cards.Sort((x, y) => x.MatchingCard.CompareTo(y.MatchingCard));
 
             return cards[0];
+        }
+
+        static CardResult FindHand(List<int> cards, List<int> suits)
+        {
+            CardResult playerHand = IsStrightFlush(cards, suits);
+            if (playerHand.HasHand)
+            {
+                return playerHand;
+            }
+
+            playerHand = IsThreeKind(cards);
+            if (playerHand.HasHand)
+            {
+                return playerHand;
+            }
+
+            playerHand = IsStraight(cards);
+            if (playerHand.HasHand)
+            {
+                return playerHand;
+            }
+
+            playerHand = IsFlush(suits);
+            if (playerHand.HasHand)
+            {
+                return playerHand;
+            }
+
+            playerHand = IsPair(cards);
+            if (playerHand.HasHand)
+            {
+                return playerHand;
+            }
+
+            return GetHighCard(cards);
         }
 
         static CardResult IsStraight(List<int> cards)
