@@ -18,30 +18,5 @@ namespace GamblersCasino
             StrightFlush
         }
 
-        public enum Suits
-        {
-            Spades = 1,
-            Diamonds,
-            Clubs,
-            Hearts,
-        }
-
-        public enum Cards
-        {
-            Two = 2,
-            Three,
-            Four,
-            Five,
-            Six,
-            Seven,
-            Eight,
-            Nine,
-            Ten,
-            Jack,
-            Queen,
-            King,
-            Ace
-        }
-
     }
 }

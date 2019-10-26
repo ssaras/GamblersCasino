@@ -1,20 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static GamblersCasino.Card;
 
 namespace GamblersCasino
 {
     class Program
     {
+
         static void Main(string[] args)
         {
             Console.WriteLine("Welcome to Grate Guy's Casino!!!");
             Console.WriteLine("How many players do you have?\n");
 
-            // int playerCount = Convert.ToInt16(Console.ReadLine());
-            int playerCount = GetRandomNumber(5,15);
+            int playerCount = Convert.ToInt16(Console.ReadLine());
+            //int playerCount = GetRandomNumber(5,15);
 
             Console.WriteLine("");
 
@@ -22,18 +25,12 @@ namespace GamblersCasino
 
             for (int i = 0; i < playerCount; i++)
             {
-                List<int> cards = new List<int>()
-                {
-                    GetRandomNumber((int)Card.Cards.Two, (int)Card.Cards.Ace),
-                    GetRandomNumber((int)Card.Cards.Two, (int)Card.Cards.Ace),
-                    GetRandomNumber((int)Card.Cards.Two, (int)Card.Cards.Ace)
-                };
-                List<int> suits = new List<int>() {
-                    GetRandomNumber((int)Card.Suits.Spades, (int)Card.Suits.Hearts),
-                    GetRandomNumber((int)Card.Suits.Spades, (int)Card.Suits.Hearts),
-                    GetRandomNumber((int)Card.Suits.Spades, (int)Card.Suits.Hearts)
-                };
+                Console.WriteLine("Enter hand.");
+                string input = Console.ReadLine();
 
+                List<int> cards = ConvertToCard(input);
+                List<int> suits = ConvertToSuit(input);
+                
                 CardResult playerHand = IsStrightFlush(cards, suits);
                 if (playerHand.HasHand)
                 {
@@ -356,6 +353,93 @@ namespace GamblersCasino
         {
             Random random = new Random();
             return random.Next(low, high);
+        }
+
+        static List<int> ConvertToSuit(string input)
+        {
+            List<int> cards = new List<int>();
+            string[] strings = input.Split(new char[0]);
+            string firstChar = String.Empty;
+            int cardValue = -1;
+
+            for (int i = 0; i < strings.Length; i++)
+            {
+                firstChar = StringInfo.GetNextTextElement(strings[i], 1);
+
+                try
+                {
+                    cardValue = Int16.Parse(firstChar);
+                }
+                catch (Exception e)
+                {
+                    switch (firstChar.ToLower())
+                    {
+                        case "h":
+                            cardValue = 1;
+                            break;
+                        case "d":
+                            cardValue = 2;
+                            break;
+                        case "s":
+                            cardValue = 3;
+                            break;
+                        case "c":
+                            cardValue = 4;
+                            break;
+                        default:
+                            break;
+                    }
+                }
+
+                cards.Add(cardValue);
+            }
+
+            return cards;
+        }
+
+        static List<int> ConvertToCard(string input)
+        {
+            List<int> cards = new List<int>();
+            string[] strings = input.Split(new char[0]);
+            string firstChar = String.Empty;
+            int cardValue = -1;
+
+            for (int i = 0; i < strings.Length; i++)
+            {
+                firstChar = StringInfo.GetNextTextElement(strings[i], 0);
+
+                try
+                {
+                    cardValue = Int16.Parse(firstChar);
+                }
+                catch (Exception e)
+                {
+                    switch (firstChar.ToUpper())
+                    {
+                        case "T":
+                            cardValue = 10;
+                            break;
+                        case "J":
+                            cardValue = 11;
+                            break;
+                        case "Q":
+                            cardValue = 12;
+                            break;
+                        case "K":
+                            cardValue = 13;
+                            break;
+                        case "A":
+                            cardValue = 14;
+                            break;
+                        default:
+                            break;
+                    }
+                }
+
+                cards.Add(cardValue);
+            }
+
+            return cards;
         }
     }
 }
