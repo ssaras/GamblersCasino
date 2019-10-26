@@ -75,7 +75,6 @@ namespace GamblersCasino
 
         static CardResult IsStraight(List<int> cards)
         {
-            CardResult cardResult = new CardResult();
             int[] cardsSorted = cards.OrderBy(i => i).ToArray();
             bool isStraight = false;
 
@@ -89,12 +88,19 @@ namespace GamblersCasino
             {
                 isStraight = false;
             }
+            // Check every other hand
             else
             {
-                
+                int? currentCard = null;
+                int? nextCard = null;
+
+                // If the current card + 1 matches the value of the next card
+                // for every itteration, we have a straight.
                 for (int i = 0; i<cardsSorted.Length -1; i++)
                 {
-                    if (cardsSorted[i] + 1 == cardsSorted[i + 1])
+                    currentCard = cardsSorted[i];
+                    nextCard = cardsSorted[i + 1];
+                    if (currentCard + 1 == nextCard)
                     {
                         isStraight = true;
                         continue;
@@ -107,8 +113,10 @@ namespace GamblersCasino
                 }
             }
 
-            cardResult.HasHand = isStraight;
-            cardResult.Hand = cardsSorted;
+            CardResult cardResult = new CardResult {
+                HasHand = isStraight,
+                Hand = cardsSorted
+            };
 
             return cardResult;
         }
