@@ -1,15 +1,14 @@
-﻿using GamblersCasino.Hands;
+﻿using GamblersCasinoApi.Hands;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GamblersCasino
+namespace GamblersCasinoApi
 {
-    class Player
+    public class Player
     {
-
         public int PlayerId { get; set; }
         public BaseHand Hand { get; set; }
 

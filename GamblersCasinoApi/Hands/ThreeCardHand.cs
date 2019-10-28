@@ -1,11 +1,11 @@
-﻿using GamblersCasino.Enums;
+﻿using GamblersCasinoApi.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace GamblersCasino.Hands
+namespace GamblersCasinoApi.Hands
 {
-    class ThreeCardHand : BaseHand
+    public class ThreeCardHand : BaseHand
     {
 
         public ThreeCardHand(string rawInput)

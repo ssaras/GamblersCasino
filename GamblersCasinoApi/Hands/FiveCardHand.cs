@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GamblersCasino.Analyze
+namespace GamblersCasinoApi.Hands
 {
-    class BlackjackHand : IAnalyzeHand
+    public class FiveCardHand : BaseHand
     {
-        public List<Player> FindBestHand(List<Player> players, int hightCardIndex)
+        protected override int FindHand()
         {
             throw new NotImplementedException();
         }

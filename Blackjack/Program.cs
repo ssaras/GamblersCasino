@@ -4,13 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GamblersCasino.Hands
+namespace Blackjack
 {
-    class FiveCardHand : BaseHand
+    class Program
     {
-        protected override int FindHand()
+        static void Main(string[] args)
         {
-            throw new NotImplementedException();
+            // Create Blackjack Gui project here
         }
     }
 }

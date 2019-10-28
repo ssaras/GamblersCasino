@@ -1,13 +1,13 @@
-﻿using GamblersCasino.Enums;
+﻿using GamblersCasinoApi.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GamblersCasino.Hands
+namespace GamblersCasinoApi.Hands
 {
-    abstract class BaseHand 
+    public abstract class BaseHand 
     {
         public List<Card> Cards { get; set; }
         public Card HighCard { get; set; }

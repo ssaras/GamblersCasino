@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GamblersCasino.Hands
+namespace GamblersCasinoApi.Hands
 {
-    class BlackjackHand : BaseHand
+    public class GamblersCasinoApi : BaseHand
     {
         protected override int FindHand()
         {

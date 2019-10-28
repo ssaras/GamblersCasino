@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GamblersCasino.Analyze
+namespace GamblersCasinoApi.Analyze
 {
-    class PokerHand : IAnalyzeHand
+    public class PokerHand : IAnalyzeHand
     {
         public List<Player> FindBestHand(List<Player> players, int highCardIndex)
         {

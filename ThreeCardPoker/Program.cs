@@ -1,12 +1,15 @@
-﻿using GamblersCasino.Analyze;
-using GamblersCasino.Hands;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using GamblersCasinoApi;
+using GamblersCasinoApi.Hands;
+using GamblersCasinoApi.Analyze;
 
-namespace GamblersCasino
+namespace ThreeCardPoker
 {
     class Program
     {
+        // Three Card Gui project
+
         static void Main(string[] args)
         {
             bool playAgain = true;
@@ -50,10 +53,7 @@ namespace GamblersCasino
                 Console.WriteLine(output);
                 Console.ReadLine();
             }
-                        
-        }
 
-        
+        }
     }
 }
-
