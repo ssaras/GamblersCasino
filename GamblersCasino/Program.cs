@@ -26,7 +26,7 @@ namespace GamblersCasino
 
                 string playerInput = String.Empty;
 
-                for (int i = 0; i < playerCount -1; i++)
+                for (int i = 0; i < playerCount; i++)
                 {
                     playerInput = Console.ReadLine();
 
@@ -39,7 +39,16 @@ namespace GamblersCasino
 
                 PokerHand pokerHand = new PokerHand();
                 List<Player> winners = pokerHand.FindBestHand(players, 2);
+                string output = String.Empty;
 
+                foreach (Player winner in winners)
+                {
+                    output += winner.PlayerId + " ";
+                }
+
+                Console.WriteLine("");
+                Console.WriteLine(output);
+                Console.ReadLine();
             }
                         
         }

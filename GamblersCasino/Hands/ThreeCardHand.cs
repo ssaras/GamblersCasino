@@ -8,17 +8,6 @@ namespace GamblersCasino.Hands
     class ThreeCardHand : BaseHand
     {
 
-        //public enum HandType
-        //{
-        //    HighCard = 1,
-        //    Pair,
-        //    Flush,
-        //    Straight,
-        //    ThreeKind,
-        //    StraightFlush
-        //}
-
-
         public ThreeCardHand(string rawInput)
         {
             Cards = ConvertToCards(rawInput);

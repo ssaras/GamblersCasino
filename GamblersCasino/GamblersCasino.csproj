@@ -43,7 +43,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Analyze\BlackjackHand.cs" />
+    <Compile Include="Analyze\IAnalyzeHand.cs" />
+    <Compile Include="Analyze\PokerHand.cs" />
     <Compile Include="Card.cs" />
+    <Compile Include="Enums\HandType.cs" />
     <Compile Include="Hands\BaseHand.cs" />
     <Compile Include="Hands\BlackjackHand.cs" />
     <Compile Include="Hands\FiveCardHand.cs" />

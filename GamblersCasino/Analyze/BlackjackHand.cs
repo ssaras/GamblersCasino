@@ -8,7 +8,7 @@ namespace GamblersCasino.Analyze
 {
     class BlackjackHand : IAnalyzeHand
     {
-        public List<Player> FindBestHand(List<Player> players)
+        public List<Player> FindBestHand(List<Player> players, int hightCardIndex)
         {
             throw new NotImplementedException();
         }

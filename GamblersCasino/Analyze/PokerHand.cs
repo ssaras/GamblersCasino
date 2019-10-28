@@ -111,8 +111,13 @@ namespace GamblersCasino.Analyze
             return GetHighCard(highCards, 2);
         }
 
+        //public List<Card> 
+
         public List<Player> GetHighCard(List<Player> players, int highCardIndex)
         {
+
+            players.Sort((x, y) => x.Hand.HighCard.Rank.CompareTo(y.Hand.HighCard.Rank));
+
             int highestNumber = -1;
             int currentNumber;
             List<Player> highCards = new List<Player>();
@@ -152,4 +157,4 @@ namespace GamblersCasino.Analyze
         }
     }
 }
-}
+
