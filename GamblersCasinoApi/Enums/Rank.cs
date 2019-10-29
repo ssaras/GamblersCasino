@@ -8,7 +8,8 @@ namespace GamblersCasinoApi.Enums
 {
     public enum Rank
     {
-        Two = 2,
+        AceLow = 1,
+        Two,
         Three,
         Four,
         Five,

@@ -19,9 +19,15 @@ namespace GamblersCasinoApi.Hands
             HandType = (HandType)FindHand();
         }
 
-        public HandType GetHandType()
+        protected override void SortHand()
         {
-            return HandType;
+            base.SortHand();
+
+            if (Cards[0].Rank == Rank.Two && Cards[1].Rank == Rank.Three && Cards[2].Rank == Rank.A)
+            {
+                Cards[2].Rank = Rank.AceLow;
+                base.SortHand();
+            }
         }
 
         protected override int FindHand()
@@ -83,13 +89,8 @@ namespace GamblersCasinoApi.Hands
         {
             bool isStraight = false;
 
-            // Check Ace, Two, Three run
-            if (Cards[0].Rank == Rank.Two && Cards[1].Rank == Rank.Three && Cards[2].Rank == Rank.A)
-            {
-                isStraight = true;
-            }
             // Check King Ace, Two run
-            else if (Cards[0].Rank == Rank.Two && Cards[1].Rank == Rank.K && Cards[2].Rank == Rank.A)
+            if (Cards[0].Rank == Rank.Two && Cards[1].Rank == Rank.K && Cards[2].Rank == Rank.A)
             {
                 isStraight = false;
             }
