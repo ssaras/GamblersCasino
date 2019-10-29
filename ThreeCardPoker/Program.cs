@@ -47,11 +47,17 @@ namespace ThreeCardPoker
                     output += winner.PlayerId + " ";
                 }
 
-                Console.WriteLine("");
                 Console.WriteLine(output);
-                Console.ReadLine();
-            }
+                Console.WriteLine("\nPress Enter to play again. Enter any key to quit.");
 
+                string playAgainInput = Console.ReadLine();
+
+                if (!playAgainInput.Equals(String.Empty))
+                {
+                    playAgain = false;
+                }
+
+            }
         }
     }
 }
