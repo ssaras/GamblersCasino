@@ -113,7 +113,7 @@ namespace GamblersCasinoApi.Analyze
 
         //public List<Card> 
 
-        public List<Player> GetHighCard(List<Player> players, int highCardIndex)
+        private List<Player> GetHighCard(List<Player> players, int highCardIndex)
         {
 
             players.Sort((x, y) => x.Hand.HighCard.Rank.CompareTo(y.Hand.HighCard.Rank));
