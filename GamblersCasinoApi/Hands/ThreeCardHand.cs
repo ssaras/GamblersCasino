@@ -60,12 +60,12 @@ namespace GamblersCasinoApi.Hands
             
         }
 
-        public bool IsStraightFlush()
+        private bool IsStraightFlush()
         {
             return IsStraight() && IsFlush();
         }
 
-        public bool IsThreeKind()
+        private bool IsThreeKind()
         {
             List<Rank> matches = Cards.GroupBy(i => i.Rank).Where(g => g.Count() == 3).Select(g => g.Key).ToList();
 
@@ -80,7 +80,7 @@ namespace GamblersCasinoApi.Hands
             }
         }
 
-        public bool IsStraight()
+        private bool IsStraight()
         {
             bool isStraight = false;
 
@@ -117,7 +117,7 @@ namespace GamblersCasinoApi.Hands
             return isStraight;
         }
 
-        public bool IsFlush()
+        private bool IsFlush()
         {
             List<Suit> matches = Cards.GroupBy(i => i.Suit).Where(g => g.Count() == 3).Select(g => g.Key).ToList();
 
@@ -132,7 +132,7 @@ namespace GamblersCasinoApi.Hands
             }            
         }
 
-        public bool IsPair()
+        private bool IsPair()
         {
             List<Rank> matches = Cards.GroupBy(i => i.Rank).Where(g => g.Count() == 2).Select(g => g.Key).ToList();
 
