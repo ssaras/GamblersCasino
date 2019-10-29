@@ -32,37 +32,32 @@ namespace GamblersCasinoApi.Hands
 
         protected override int FindHand()
         {
-            int handTypes;
 
-            for (handTypes = Enum.GetValues(typeof(HandType)).Length; handTypes > 1; handTypes--)
+            if (IsStraightFlush())
             {
-                if (IsStraightFlush())
-                {
-                    break;
-                }
-                else if (IsThreeKind())
-                {
-                    break;
-                }
-                else if (IsStraight())
-                {
-                    break;
-                }
-                else if (IsFlush())
-                {
-                    break;
-                }
-                else if (IsPair())
-                {
-                    break;
-                }
-                else
-                {
-                    break;
-                }
+                return 6;
             }
-
-            return handTypes;
+            else if (IsThreeKind())
+            {
+                return 5;
+            }
+            else if (IsStraight())
+            {
+                return 4;
+            }
+            else if (IsFlush())
+            {
+                return 3;
+            }
+            else if (IsPair())
+            {
+                return 2;
+            }
+            else
+            {
+                return 1;
+            }
+            
         }
 
         public bool IsStraightFlush()
