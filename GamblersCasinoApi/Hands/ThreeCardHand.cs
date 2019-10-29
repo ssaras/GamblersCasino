@@ -32,32 +32,26 @@ namespace GamblersCasinoApi.Hands
             {
                 if (IsStraightFlush())
                 {
-                    Console.WriteLine("straight flush");
                     break;
                 }
                 else if (IsThreeKind())
                 {
-                    Console.WriteLine("three kind");
                     break;
                 }
                 else if (IsStraight())
                 {
-                    Console.WriteLine("straight");
                     break;
                 }
                 else if (IsFlush())
                 {
-                    Console.WriteLine("flush");
                     break;
                 }
                 else if (IsPair())
                 {
-                    Console.WriteLine("pair");
                     break;
                 }
                 else
                 {
-                    Console.WriteLine("high card");
                     break;
                 }
             }

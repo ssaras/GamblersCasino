@@ -15,8 +15,6 @@ namespace ThreeCardPoker
             bool playAgain = true;
             while (playAgain)
             {
-
-
                 Console.WriteLine("Welcome to Grate Guy's Casino!!!");
                 Console.WriteLine("How many players do you have?");
 
